@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.nti56.csplice</groupId>
+        <artifactId>nti-csplice-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>nti-csplice-log-collector</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>nti-csplice-log-collector-client</module>
+        <module>nti-csplice-log-collector-agent</module>
+        <module>nti-csplice-log-collector-common</module>
+    </modules>
+    <properties>
+        <!-- 版本重命名-->
+        <nti-csplice-version>1.0-SNAPSHOT</nti-csplice-version>
+    </properties>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.nti56.csplice</groupId>
+                <artifactId>nti-csplice-spring-common-starter</artifactId>
+                <version>${nti-csplice-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.nti56.csplice</groupId>
+                <artifactId>nti-csplice-spring-api-common</artifactId>
+                <version>${nti-csplice-version}</version>
+            </dependency>
+        </dependencies>
+
+    </dependencyManagement>
+
+</project>
