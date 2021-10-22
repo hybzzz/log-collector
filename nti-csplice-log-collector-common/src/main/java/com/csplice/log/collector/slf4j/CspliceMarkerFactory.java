@@ -18,7 +18,7 @@ public class CspliceMarkerFactory {
 
     public static Marker getMarker(String name) {
         if (name == null) {
-            throw new IllegalArgumentException("Marker name cannot be null");
+            throw new IllegalArgumentException("Marker name   cannot be null");
         } else {
             Marker marker = MARKER_MAP.get(name);
             if (marker == null) {
