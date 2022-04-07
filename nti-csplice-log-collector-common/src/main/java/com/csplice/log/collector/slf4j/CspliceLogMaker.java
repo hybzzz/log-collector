@@ -1,6 +1,5 @@
 package com.csplice.log.collector.slf4j;
 
-import org.apache.logging.log4j.MarkerManager;
 import org.slf4j.Marker;
 
 import java.util.Iterator;

@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, DruidDataSourceAutoConfigure.class})
 @Controller("demo")
 @Slf4j
-public class DemoApplication {
+public class DemoApplication2 {
         public static void main(String[] args) {
-            SpringApplication.run(DemoApplication.class, args);
+            SpringApplication.run(DemoApplication2.class, args);
         }
         @GetMapping("test/{id}")
         @SneakyThrows

@@ -11,7 +11,7 @@
 
     <artifactId>nti-csplice-log-collector</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <modules>
         <module>nti-csplice-log-collector-client</module>
         <module>nti-csplice-log-collector-agent</module>
@@ -20,6 +20,7 @@
         <module>nti-csplice-ws-starter</module>
         <module>demo-provider</module>
         <module>demo-provider2</module>
+        <module>demo-consumer</module>
     </modules>
     <properties>
         <!-- 版本重命名-->

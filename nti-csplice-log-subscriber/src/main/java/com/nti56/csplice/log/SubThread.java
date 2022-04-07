@@ -9,28 +9,20 @@ import java.util.function.BiConsumer;
 
 @Slf4j
 public class SubThread extends Thread {
-    private String ip;
-    private int port;
+    private String url;
     private String channel ;
     private CountDownLatch latch;
 
     private  JedisPooled pool ;
     private BiConsumer<String,String> callBack;
     private static  final MessageHandler SUB = new MessageHandler();
-    public String getIp() {
-        return ip;
+
+    public String getUrl() {
+        return url;
     }
 
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getChannel() {
@@ -57,21 +49,19 @@ public class SubThread extends Thread {
         this.latch = latch;
     }
 
-    public SubThread(String ip, int port, String channel){
+    public SubThread(String url, String channel){
         this.channel = channel;
-        this.port = port;
-        this.ip = ip ;
-        this.pool =  new JedisPooled(ip, port);
+        this.url = url;
+        this.pool =  new JedisPooled(url);
     }
 
-    public SubThread(String ip, int port,
+    public SubThread(String url,
                      String channel,
                      BiConsumer<String,String> callback){
         this.channel = channel;
-        this.port = port;
-        this.ip = ip ;
+        this.url = url ;
         this.callBack = callback ;
-        this.pool =  new JedisPooled(ip, port);
+        this.pool =  new JedisPooled(url);
     }
 
     @Override

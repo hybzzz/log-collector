@@ -17,7 +17,7 @@ public class LogPluginEntry implements PluginEntry {
     @Override
     public void init(Environment environment, PluginConfig config) {
         String appName = environment.getAppName();
-        JedisUtils.setAppName(appName);
+        System.out.println("=================log plugin===========================");
         JedisUtils.initJedis(config);
         AttachOnlyTransformer samplePlugin = new AttachOnlyTransformer(config.getBySection("LOG"));
         transformers.add(samplePlugin);

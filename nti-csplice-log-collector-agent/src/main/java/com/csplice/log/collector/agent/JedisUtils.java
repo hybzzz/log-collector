@@ -5,7 +5,6 @@ import com.janetfilter.core.commons.DebugInfo;
 import com.janetfilter.core.models.FilterRule;
 import com.janetfilter.core.plugin.PluginConfig;
 import org.slf4j.Marker;
-import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPooled;
 
 import java.util.List;
@@ -25,16 +24,12 @@ import java.util.concurrent.TimeUnit;
 public class JedisUtils {
     private static JedisPooled POOL ;
 
-    private static String CHANNEL = "csplice_log_default";
+    private static String CHANNEL = "csplice_log";
     private static String IP = "IP";
     private static String PORT = "PORT";
     private static final ExecutorService LOG_ASYNC_EXECUTOR = new ThreadPoolExecutor(
             0, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS, new SynchronousQueue<>(),
             new ThreadFactoryBuilder().setNameFormat("log-worker-%d").setDaemon(true).build());
-
-    public static void setAppName(String appName) {
-        JedisUtils.CHANNEL = "csplice_log_"+appName;
-    }
 
 
     public static void  sendToChannel(Marker marker, String message){

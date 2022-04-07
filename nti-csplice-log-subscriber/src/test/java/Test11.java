@@ -1,4 +1,4 @@
-import com.nti56.csplice.log.utils.logSubUtils;
+import com.nti56.csplice.log.utils.LogSubUtils;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -13,8 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 public class Test11 {
 
     public static void main(String[] args) throws InterruptedException {
-        logSubUtils.subscribe("139.159.194.101", 21181
-        ,"csplice_log_test_module_assembly_123",(c,m)->{
+        LogSubUtils.subscribe("redis://139.159.194.101:21181"
+        ,"csplice_log_1512109745675354113",(c,m)->{
                     System.out.println(c);
                     System.out.println(m);
                 });

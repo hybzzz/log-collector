@@ -37,6 +37,11 @@ public class TextMessageHandler extends TextWebSocketHandler {
         log.info("当前连接数:{}",conns.size());
         String token = (String) session.getAttributes().get(GlobalConst.TOKEN);
         String channel = (String) session.getAttributes().get(GlobalConst.CHANNEL);
+        JSONObject userByToken = getUserInfo(token);
+        log.info("创建连接成功:channel->{},userid->{},socketid->{}",channel,userByToken.getString("userId"),session.getId());
+        String key = String.format(CONN_KEY,channel,userByToken.getString("userId"),session.getId());
+        conns.put(key,session);
+        log.info("当前连接数:{}",conns.size());
     }
 
     
@@ -52,7 +57,13 @@ public class TextMessageHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
         log.info("关闭websocket连接:{}",session.getId());
-        //todo 自定义回调
+        String token = (String) session.getAttributes().get(GlobalConst.TOKEN);
+        String channel = (String) session.getAttributes().get(GlobalConst.CHANNEL);
+        JSONObject userByToken = getUserInfo(token);
+        log.info("用户:{}，sockerid:{} 已退出",userByToken.getString("realname"),session.getId());
+        String key = String.format(CONN_KEY,channel,userByToken.getString("userId"),session.getId());
+        conns.remove(key);
+        log.info("剩余在线用户:{}",conns.size());
     }
 
     /**
@@ -78,9 +89,12 @@ public class TextMessageHandler extends TextWebSocketHandler {
             session.close();
         }
         log.debug("传输出现异常，关闭websocket连接... ");
-        //todo 自定义回调
-//        log.info("用户:{}，sockerid:{} 已退出",userByToken.getString("realname"),session.getId());
-//        conns.remove(key);
+        String token = (String) session.getAttributes().get(GlobalConst.TOKEN);
+        String channel = (String) session.getAttributes().get(GlobalConst.CHANNEL);
+        JSONObject userByToken = getUserInfo(token);
+        String key = String.format(CONN_KEY,channel,userByToken.getString("userId"),session.getId());
+        log.info("用户:{}，sockerid:{} 已退出",userByToken.getString("realname"),session.getId());
+        conns.remove(key);
     }
 
     @Override

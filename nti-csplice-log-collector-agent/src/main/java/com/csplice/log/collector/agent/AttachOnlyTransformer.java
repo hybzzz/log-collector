@@ -31,7 +31,6 @@ public class AttachOnlyTransformer implements MyTransformer {
 
     @Override
     public byte[] transform(String className, byte[] classBytes, int order) throws Exception {
-        LogFilter.setRules(rules);
 
         ClassReader reader = new ClassReader(classBytes);
 

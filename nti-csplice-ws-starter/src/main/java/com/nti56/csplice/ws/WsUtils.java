@@ -12,9 +12,9 @@ import com.alibaba.fastjson.JSONObject;
  */
 public class WsUtils {
 
-    public static  void sendMessageToChannelUsers(){
+    public static  void sendMessageToChannelUsers(String message,String channel){
         // 新建工程 引入订阅者插件，引入wsstarter ， 调用订阅，回调中调用ws的发送
-        TextMessageHandler.sendMessageToUsers("","");
+        TextMessageHandler.sendMessageToUsers(message,channel);
     }
 
 

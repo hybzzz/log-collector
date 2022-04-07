@@ -5,7 +5,7 @@
     <parent>
         <artifactId>nti-csplice-log-collector</artifactId>
         <groupId>com.nti56.csplice</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -46,8 +46,16 @@
                 <version>3.1.0</version>
                 <configuration>
                     <archive>
-                        <addMavenDescriptor>false</addMavenDescriptor>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                        <manifestEntries>
+                            <JANF-Plugin-Entry>com.csplice.log.collector.agent.LogPluginEntry</JANF-Plugin-Entry>
+                        </manifestEntries>
                     </archive>
+<!--                    <archive>-->
+<!--                        <addMavenDescriptor>false</addMavenDescriptor>-->
+<!--                    </archive>-->
                 </configuration>
             </plugin>
             <plugin>
@@ -81,9 +89,9 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>4.2.0</version>
+            <groupId>com.nti56.csplice</groupId>
+            <artifactId>nti-csplice-log-collector-common</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.ja-netfilter</groupId>
@@ -92,36 +100,20 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.12</version>
-        </dependency>
-        <!-- logback-->
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.2.3</version>
-        </dependency>
-
-        <!-- log4j -->
-        <!-- log4j -->
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.16</version>
-        </dependency>
-
-        <!--用于与slf4j保持桥接-->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
-            <version>2.4.1</version>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>4.2.0</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.nti56.csplice</groupId>
-            <artifactId>nti-csplice-log-collector-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>20.0</version>
         </dependency>
 
     </dependencies>
