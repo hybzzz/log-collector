@@ -16,6 +16,10 @@
         <module>nti-csplice-log-collector-client</module>
         <module>nti-csplice-log-collector-agent</module>
         <module>nti-csplice-log-collector-common</module>
+        <module>nti-csplice-log-subscriber</module>
+        <module>nti-csplice-ws-starter</module>
+        <module>demo-provider</module>
+        <module>demo-provider2</module>
     </modules>
     <properties>
         <!-- 版本重命名-->
@@ -34,6 +38,11 @@
                 <groupId>com.nti56.csplice</groupId>
                 <artifactId>nti-csplice-spring-api-common</artifactId>
                 <version>${nti-csplice-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.nti56.csplice</groupId>
+                <artifactId>nti-csplice-spring-jwt-token-starter</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
         </dependencies>
 

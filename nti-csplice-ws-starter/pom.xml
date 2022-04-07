@@ -9,15 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>nti-csplice-log-collector-common</artifactId>
-
+    <artifactId>nti-csplice-ws-starter</artifactId>
 
     <dependencies>
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>4.2.0</version>
-        </dependency>
         <dependency>
             <groupId>com.nti56.csplice</groupId>
             <artifactId>nti-csplice-spring-common-starter</artifactId>
@@ -26,5 +20,14 @@
             <groupId>com.nti56.csplice</groupId>
             <artifactId>nti-csplice-spring-api-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.nti56.csplice</groupId>
+            <artifactId>nti-csplice-spring-jwt-token-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
     </dependencies>
+
 </project>
