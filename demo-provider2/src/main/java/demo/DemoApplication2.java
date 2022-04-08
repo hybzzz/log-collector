@@ -11,9 +11,10 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, DruidDataSourceAutoConfigure.class})
-@Controller("demo")
+@RestController("demo")
 @Slf4j
 public class DemoApplication2 {
         public static void main(String[] args) {
@@ -21,7 +22,7 @@ public class DemoApplication2 {
         }
         @GetMapping("test/{id}")
         @SneakyThrows
-        public void test(@PathVariable Long id){
+        public String test(@PathVariable Long id){
             Marker marker = CspliceMarkerFactory.getMarker(id + "");
             log.info(marker,"微服务2开始执行");
             Thread.sleep(1000);
@@ -44,6 +45,6 @@ public class DemoApplication2 {
             Thread.sleep(1000);
 
             log.info(marker,"微服务2执行结束");
-
+            return "success";
         }
 }

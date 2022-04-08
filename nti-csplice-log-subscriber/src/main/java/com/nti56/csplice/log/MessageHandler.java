@@ -23,8 +23,19 @@ public class MessageHandler extends JedisPubSub {
         this.callBack = callBack;
     }
 
+    private Long lastActive = 0L;
+
+    public Long getLastActive() {
+        return lastActive;
+    }
+
+    public void setLastActive(Long lastActive) {
+        this.lastActive = lastActive;
+    }
+
     @Override
     public void onMessage(String channel, String message) {
+        lastActive = System.currentTimeMillis();
         super.onMessage(channel, message);
         log.info("receive message from channel : {} -> :{}",channel,message);
         if(callBack!=null){

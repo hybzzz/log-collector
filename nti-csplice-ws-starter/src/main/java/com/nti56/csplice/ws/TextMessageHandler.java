@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.nimbusds.jose.JWSObject;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -14,13 +16,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
+@Component
 public class TextMessageHandler extends TextWebSocketHandler {
 
 
     private static final Map<String, WebSocketSession> conns;
 
     private static final String CONN_KEY = "%s-%s-%s";
-
+    @Autowired(required = false)
+    WebSocketEvent webSocketEvent;
 
     static {
         conns =  new HashMap<String, WebSocketSession>();
@@ -42,6 +46,9 @@ public class TextMessageHandler extends TextWebSocketHandler {
         String key = String.format(CONN_KEY,channel,userByToken.getString("userId"),session.getId());
         conns.put(key,session);
         log.info("当前连接数:{}",conns.size());
+        if(webSocketEvent!=null){
+            webSocketEvent.afterConnectionEstablished(session);
+        }
     }
 
     
@@ -64,6 +71,9 @@ public class TextMessageHandler extends TextWebSocketHandler {
         String key = String.format(CONN_KEY,channel,userByToken.getString("userId"),session.getId());
         conns.remove(key);
         log.info("剩余在线用户:{}",conns.size());
+        if(webSocketEvent!=null){
+            webSocketEvent.afterConnectionClosed(session,closeStatus);
+        }
     }
 
     /**
@@ -75,9 +85,9 @@ public class TextMessageHandler extends TextWebSocketHandler {
 
         super.handleTextMessage(session, textMessage);
 
-        String message = textMessage.getPayload();
-        //todo 自定义回调
-
+        if(webSocketEvent!=null){
+            webSocketEvent.handleTextMessage(session,textMessage);
+        }
 
 
 
@@ -95,11 +105,16 @@ public class TextMessageHandler extends TextWebSocketHandler {
         String key = String.format(CONN_KEY,channel,userByToken.getString("userId"),session.getId());
         log.info("用户:{}，sockerid:{} 已退出",userByToken.getString("realname"),session.getId());
         conns.remove(key);
+        if(webSocketEvent!=null){
+            webSocketEvent.handleTransportError(session,exception);
+        }
     }
 
     @Override
     public boolean supportsPartialMessages() {
-        //todo 自定义回调
+        if(webSocketEvent!=null){
+            return webSocketEvent.supportsPartialMessages();
+        }
         return false;
     }
 

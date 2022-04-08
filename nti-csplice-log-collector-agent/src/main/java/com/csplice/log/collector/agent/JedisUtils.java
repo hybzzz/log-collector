@@ -25,8 +25,7 @@ public class JedisUtils {
     private static JedisPooled POOL ;
 
     private static String CHANNEL = "csplice_log";
-    private static String IP = "IP";
-    private static String PORT = "PORT";
+    private static String REDIS = "REDIS";
     private static final ExecutorService LOG_ASYNC_EXECUTOR = new ThreadPoolExecutor(
             0, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS, new SynchronousQueue<>(),
             new ThreadFactoryBuilder().setNameFormat("log-worker-%d").setDaemon(true).build());
@@ -41,21 +40,15 @@ public class JedisUtils {
     }
 
     public static void initJedis(PluginConfig config){
-        List<FilterRule> ipRules = config.getBySection(IP);
-        List<FilterRule> portRules = config.getBySection(PORT);
-        String ip = "localhost" ;
-        int port = 6379;
-        if(ipRules!=null && ipRules.size()>0){
-            ip = ipRules.get(0).getRule();
-        }
-        if(portRules!=null && portRules.size()>0){
+        List<FilterRule> redisRules = config.getBySection(REDIS);
+        String url = "redis://localhost:6379" ;
+        if(redisRules!=null && redisRules.size()>0){
             try{
-                String portStr = portRules.get(0).getRule();
-                port = Integer.parseInt(portStr);
+                url = redisRules.get(0).getRule();
             }catch (Exception e){
                 // in
             }
-            POOL = new JedisPooled(ip, port);
+            POOL = new JedisPooled(url);
         }
 
     }

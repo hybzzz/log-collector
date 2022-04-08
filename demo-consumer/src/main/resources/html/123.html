@@ -1,29 +1,54 @@
+<html>
+<body>
+<input id="channel"   value="" type="text">
+<input id="token"   value="eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uS2V5IjoibnRpOmxvZ2luX2lkOmh5YjpwYyIsInVzZXJfbmFtZSI6Imh5Yi1wYyIsInNjb3BlIjpbImFsbCJdLCJleHAiOjE2NDk0MjQ0OTEsInByb2R1Y3RLZXkiOiJudGk6dG9rZW5fdXNlcjpoeWI6cGMiLCJ1c2VySWQiOiIxNDgzMzEwNTg5MTYxMzYxNDEwIiwianRpIjoiOTJlM2I4NzEtZWJlZC00YzM4LTlhYWEtNmMwZDIzNDYyNjNjIiwiY2xpZW50X2lkIjoibnRpX2NsaWVudF9pZCIsInVzZXJuYW1lIjoiaHliIiwicmVhbG5hbWUiOiJoeWIifQ.ffSLmTamYrow5vDsHywyIl7wdY0ylBkIoSkIYithFCDt-UlWP_K6d7W2QCYwyG1fYdeMQqMPGjEGBKMZlNwWEOhn0Pnv1muhYqX4YkXlOUpWwXVzKC31tkAPOfpGXRnqTBow33vVgGiGsmemIK2jvY2yTwOA_mZxzl1kH3pCj-Q" type="text">
+<input type="button" class="" id="btn" value="go">
+
+<div id="content" style="width: 100%;min-height: 600px"></div>
 <script src="./sockjs.js">
-  </script>
+</script>
 
 <script>
-window.onload = function(){
-var ws = new SockJS("http://localhost:9999/log-sockjs?channel=csplice_log_1512121349993316354&token=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uS2V5IjoibnRpOmxvZ2luX2lkOmh5YjpwYyIsInVzZXJfbmFtZSI6Imh5Yi1wYyIsInNjb3BlIjpbImFsbCJdLCJleHAiOjE2NDk0MjQ0OTEsInByb2R1Y3RLZXkiOiJudGk6dG9rZW5fdXNlcjpoeWI6cGMiLCJ1c2VySWQiOiIxNDgzMzEwNTg5MTYxMzYxNDEwIiwianRpIjoiOTJlM2I4NzEtZWJlZC00YzM4LTlhYWEtNmMwZDIzNDYyNjNjIiwiY2xpZW50X2lkIjoibnRpX2NsaWVudF9pZCIsInVzZXJuYW1lIjoiaHliIiwicmVhbG5hbWUiOiJoeWIifQ.ffSLmTamYrow5vDsHywyIl7wdY0ylBkIoSkIYithFCDt-UlWP_K6d7W2QCYwyG1fYdeMQqMPGjEGBKMZlNwWEOhn0Pnv1muhYqX4YkXlOUpWwXVzKC31tkAPOfpGXRnqTBow33vVgGiGsmemIK2jvY2yTwOA_mZxzl1kH3pCj-Q")
+    var ws ;
+    window.onload=function (){
+        document.getElementById("btn").onclick = function () {
+            var channel = document.getElementById("channel").value;
+            var token = document.getElementById("token").value;
+            openWs(channel,token)
+        }
+    }
+
+  function openWs(channel,token){
+        console.log('--------',channel,token)
+    var url = `http://localhost:9999/log-sockjs?channel=csplice_log_${channel}&token=${token}`
+    ws = new SockJS(url)
 //申请一个WebSocket对象，参数是服务端地址，同http协议使用http://开头一样，WebSocket协议的url使用ws://开头，另外安全的WebSocket协议使用wss://开头
-ws.onopen = function(){
-　　//当WebSocket创建成功时，触发onopen事件
-   console.log("open");
-　　ws.send("hello"); //将消息发送到服务端
-}
-ws.onmessage = function(e){
-　　//当客户端收到服务端发来的消息时，触发onmessage事件，参数e.data包含server传递过来的数据
-　　console.log(e.data);
-}
-ws.onclose = function(e){
-　　//当客户端收到服务端发送的关闭连接请求时，触发onclose事件
-　　console.log("close");
-}
-ws.onerror = function(e){
-　　//如果出现连接、处理、接收、发送数据失败的时候触发onerror事件
-　　console.log(error);
-}
-};
+    ws.onopen = function(){
+      //当WebSocket创建成功时，触发onopen事件
+      console.log("open");
+        document.getElementById("content").innerHTML = "open ws"
+      ws.send("hello"); //将消息发送到服务端
+    }
+    ws.onmessage = function(e){
+      //当客户端收到服务端发来的消息时，触发onmessage事件，参数e.data包含server传递过来的数据
+      console.log(e.data);
+        var innerHTML = document.getElementById("content").innerHTML;
+        innerHTML += `<p>${e.data}</p>`
+        document.getElementById("content").innerHTML = innerHTML;
+    }
+    ws.onclose = function(e){
+      //当客户端收到服务端发送的关闭连接请求时，触发onclose事件
+      console.log("close");
+    }
+    ws.onerror = function(e){
+      //如果出现连接、处理、接收、发送数据失败的时候触发onerror事件
+      console.log(error);
+    }
+  }
 
 
 
 </script>
+</body>
+
+</html>

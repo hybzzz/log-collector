@@ -1,13 +1,11 @@
 package com.nti56.csplice.log.utils;
 
-import com.google.common.eventbus.Subscribe;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.nti56.csplice.log.SubThread;
+import com.nti56.csplice.log.MessageHandler;
+import com.nti56.csplice.log.thread.SubThread;
 
 import java.util.concurrent.*;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
 
 /**
@@ -26,12 +24,16 @@ public class LogSubUtils {
     public static void subscribe  (String url,String channel,
                                    BiConsumer<String,String> callback
     )  {// 回调
-        new SubThread(url,channel,callback).start();
+        MessageHandler handler = new MessageHandler();
+        handler.setCallBack(callback);
+        new SubThread(url,channel,handler).start();
     }
     public static void subscribeAsync  (String url,String channel,
                                         BiConsumer<String,String> callback
     )  {// 回调
-        LOG_ASYNC_EXECUTOR.submit(new SubThread(url,channel,callback));
+        MessageHandler handler = new MessageHandler();
+        handler.setCallBack(callback);
+        LOG_ASYNC_EXECUTOR.submit(new SubThread(url,channel,handler));
     }
 
 

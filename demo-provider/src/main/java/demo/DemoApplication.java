@@ -53,9 +53,12 @@ public class DemoApplication {
                 Thread.sleep(1000);
                 log.info(marker,"微服务1执行:{}",7);
                 Thread.sleep(1000);
-                new RestTemplate().getForObject("http://localhost:8088/test/"+id,String.class);
+                new RestTemplate().getForEntity("http://localhost:8088/test/"+id,String.class);
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
+            }finally {
+                log.info(marker,"执行结束");
             }
 
         }).start();

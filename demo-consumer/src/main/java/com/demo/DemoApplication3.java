@@ -18,13 +18,14 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, DruidDataSourceAutoConfigure.class})
-@Controller("demo")
-@ComponentScan("com.nti56.*")
+@RestController("demo")
+@ComponentScan({"com.nti56.*","com.demo"})
 @Slf4j
 public class DemoApplication3 {
     @Bean
@@ -48,13 +49,14 @@ public class DemoApplication3 {
         }
         @GetMapping("sub/{id}")
         @SneakyThrows
-        public void test(@PathVariable Long id){
-            LogSubUtils.subscribe("redis://139.159.194.101:21181"
+        public String test(@PathVariable Long id){
+            LogSubUtils.subscribeAsync("redis://139.159.194.101:21181"
                     ,"csplice_log_"+id,(c,m)->{
                         System.out.println(c);
                         System.out.println(m);
                         WsUtils.sendMessageToChannelUsers(m,c);
 
                     });
+            return "sucesss";
         }
 }
