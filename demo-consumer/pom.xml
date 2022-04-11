@@ -3,43 +3,45 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>nti-csplice-log-collector</artifactId>
-        <groupId>com.nti56.csplice</groupId>
+        <groupId>com.hybzzz</groupId>
+        <artifactId>log-collector</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>demo-consumer</artifactId>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
         <dependency>
-            <groupId>com.nti56.csplice</groupId>
+            <groupId>com.hybzzz</groupId>
             <version>1.0.0-SNAPSHOT</version>
-            <artifactId>nti-csplice-log-subscriber</artifactId>
+            <artifactId>log-subscriber</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.nti56.csplice</groupId>
+            <groupId>com.hybzzz</groupId>
             <version>1.0.0-SNAPSHOT</version>
-            <artifactId>nti-csplice-ws-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.nti56.csplice</groupId>
-            <artifactId>nti-csplice-spring-common-starter</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
-                    <groupId>com.alibaba.cloud</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-                    <groupId>com.alibaba.cloud</groupId>
-                </exclusion>
-            </exclusions>
+            <artifactId>websocket-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
-            <version>4.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>2.2.6.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>

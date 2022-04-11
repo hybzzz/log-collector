@@ -1,18 +1,17 @@
 package demo;
 
-import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
-import com.csplice.log.collector.slf4j.CspliceMarkerFactory;
-import com.nti56.csplice.common.util.IdGenerator;
+import com.hybzzz.log.collector.slf4j.LogCollectorMarkerFactory;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Marker;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.stereotype.Controller;
+import org.springframework.util.JdkIdGenerator;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+
 
 /**
  * 类说明: <br/>
@@ -22,7 +21,7 @@ import org.springframework.web.client.RestTemplate;
  * @date 2022/4/7 14:00<br/>
  * @since JDK 1.8
  */
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, DruidDataSourceAutoConfigure.class})
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @RestController("demo")
 @Slf4j
 public class DemoApplication {
@@ -31,11 +30,11 @@ public class DemoApplication {
     }
     @GetMapping("test")
     @SneakyThrows
-    public Long test(){
-        long id = IdGenerator.getId();
+    public String test(){
+        String id = new JdkIdGenerator().generateId().toString();
 
         new Thread(()->{
-            Marker marker = CspliceMarkerFactory.getMarker(id + "");
+            Marker marker = LogCollectorMarkerFactory.getMarker(id + "");
             try {
                 log.info(marker,"开始执行");
                 Thread.sleep(30000);
