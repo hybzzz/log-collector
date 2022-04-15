@@ -1,7 +1,7 @@
 package com.demo;
 
 import com.hybzzz.log.utils.LogSubUtils;
-import com.nti56.csplice.ws.WsUtils;
+import com.hybzzz.websocket.WsUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
@@ -20,22 +20,18 @@ public class DemoApplication3 {
     public static void main(String[] args) {
             SpringApplication.run(DemoApplication3.class, args);
         }
-    @GetMapping("sub/{id}")
+    @GetMapping("sub/{channel}")
     @SneakyThrows
-    public String test(@PathVariable Long id){
-        LogSubUtils.subscribeAsync("redis://139.159.194.101:21181"
-                ,"csplice_log_"+id,(c,m)->{
+    public String test(@PathVariable String channel){
+        LogSubUtils.subscribe("redis://139.159.194.101:21181",
+                (c,m)->{
                     System.out.println(c);
                     System.out.println(m);
                     WsUtils.sendMessageToChannelUsers(m,c);
 
-                });
+                },
+                channel);
         return "sucesss";
     }
 
-    @GetMapping("test2")
-    @SneakyThrows
-    public String test2(){
-        return LogSubUtils.getCount()+"";
-    }
 }

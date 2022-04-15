@@ -1,7 +1,5 @@
-package com.nti56.csplice.ws;
+package com.hybzzz.websocket;
 
-import com.alibaba.fastjson.JSONObject;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,20 +10,21 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Component
 public class TextMessageHandler extends TextWebSocketHandler {
 
 
+
     private static final Map<String, WebSocketSession> conns;
 
-    private static final String CONN_KEY = "%s-%s-%s";
     @Autowired(required = false)
     WebSocketEvent webSocketEvent;
 
     static {
-        conns =  new HashMap<String, WebSocketSession>();
+        conns = new HashMap<>();
     }
 
     public TextMessageHandler() {}
@@ -37,42 +36,27 @@ public class TextMessageHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         log.info("当前连接数:{}",conns.size());
-        String token = (String) session.getAttributes().get(GlobalConst.TOKEN);
-        String channel = (String) session.getAttributes().get(GlobalConst.CHANNEL);
-        JSONObject userByToken = getUserInfo(token);
-        log.info("创建连接成功:channel->{},userid->{},socketid->{}",channel,userByToken.getString("userId"),session.getId());
-        String key = String.format(CONN_KEY,channel,userByToken.getString("userId"),session.getId());
-        conns.put(key,session);
-        log.info("当前连接数:{}",conns.size());
         if(webSocketEvent!=null){
+            String connKey = webSocketEvent.getConnKey(session);
+            conns.put(connKey,session);
             webSocketEvent.afterConnectionEstablished(session);
         }
+        log.info("当前连接数:{}",conns.size());
     }
 
-    
-    @SneakyThrows
-    public JSONObject getUserInfo(String token){
-        if(webSocketEvent!=null){
-            return webSocketEvent.getUserInfo(token);
-        }
-        return new JSONObject();
-    }
+
     /**
      * 关闭连接时触发
      */
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
         log.info("关闭websocket连接:{}",session.getId());
-        String token = (String) session.getAttributes().get(GlobalConst.TOKEN);
-        String channel = (String) session.getAttributes().get(GlobalConst.CHANNEL);
-        JSONObject userByToken = getUserInfo(token);
-        log.info("用户:{}，sockerid:{} 已退出",userByToken.getString("realname"),session.getId());
-        String key = String.format(CONN_KEY,channel,userByToken.getString("userId"),session.getId());
-        conns.remove(key);
-        log.info("剩余在线用户:{}",conns.size());
         if(webSocketEvent!=null){
+            String connKey = webSocketEvent.getConnKey(session);
+            conns.remove(connKey);
             webSocketEvent.afterConnectionClosed(session,closeStatus);
         }
+        log.info("剩余在线用户:{}",conns.size());
     }
 
     /**
@@ -98,13 +82,9 @@ public class TextMessageHandler extends TextWebSocketHandler {
             session.close();
         }
         log.debug("传输出现异常，关闭websocket连接... ");
-        String token = (String) session.getAttributes().get(GlobalConst.TOKEN);
-        String channel = (String) session.getAttributes().get(GlobalConst.CHANNEL);
-        JSONObject userByToken = getUserInfo(token);
-        String key = String.format(CONN_KEY,channel,userByToken.getString("userId"),session.getId());
-        log.info("用户:{}，sockerid:{} 已退出",userByToken.getString("realname"),session.getId());
-        conns.remove(key);
         if(webSocketEvent!=null){
+            String connKey = webSocketEvent.getConnKey(session);
+            conns.remove(connKey);
             webSocketEvent.handleTransportError(session,exception);
         }
     }
@@ -119,15 +99,23 @@ public class TextMessageHandler extends TextWebSocketHandler {
 
 
 
+    public static long countChannelCon(String channelPattern){
+        Pattern pattern = Pattern.compile(channelPattern);
+        return conns.keySet().stream().filter(
+                (k) -> pattern.matcher(k).find() ).count();
+    }
+
     /**
      * 给所有在线用户发送消息
      *
      */
-    public static void sendMessageToUsers(String message, String channel) {
+    public static void sendMessageToUsers(String message, String channelPattern) {
+        Pattern pattern = Pattern.compile(channelPattern);
+
         if (null != message && message.length() != 0) {
             try {
                 for (String key : conns.keySet()) {
-                    if (key.startsWith(channel + "-")) {
+                    if(pattern.matcher(key).find()){
                         TextMessage t = new TextMessage(message);
                         conns.get(key).sendMessage(t);
                     }
@@ -137,4 +125,5 @@ public class TextMessageHandler extends TextWebSocketHandler {
             }
         }
     }
+
 }

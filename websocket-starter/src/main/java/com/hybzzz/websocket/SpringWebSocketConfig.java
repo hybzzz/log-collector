@@ -1,4 +1,4 @@
-package com.nti56.csplice.ws;
+package com.hybzzz.websocket;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

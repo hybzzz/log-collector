@@ -1,4 +1,4 @@
-package com.nti56.csplice.ws;
+package com.hybzzz.websocket;
 
 /**
  * 类说明: <br/>

@@ -17,11 +17,9 @@ public class AttachOnlyTransformer implements MyTransformer {
         return "ch/qos/logback/core/spi/AppenderAttachableImpl";
     }
 
-    public AttachOnlyTransformer( List<FilterRule> rules) {
-        this.rules = rules;
+    public AttachOnlyTransformer( ) {
     }
 
-    private final List<FilterRule> rules;
 
     @Override
     public boolean javaagentMode() {

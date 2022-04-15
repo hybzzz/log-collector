@@ -4,15 +4,13 @@ import com.hybzzz.log.handler.MessageHandler;
 import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.JedisPooled;
 
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
 
 
 @Slf4j
-public class SubThread extends Thread {
+public class PSubThread extends Thread {
     private String url;
-    private String[] channels ;
+    private String[] channelPatterns ;
     private CountDownLatch latch;
 
     private  JedisPooled pool ;
@@ -26,12 +24,12 @@ public class SubThread extends Thread {
         this.url = url;
     }
 
-    public String[] getChannels() {
-        return channels;
+    public String[] getChannelPatterns() {
+        return channelPatterns;
     }
 
-    public void setChannels(String[] channels) {
-        this.channels = channels;
+    public void setChannelPatterns(String[] channelPatterns) {
+        this.channelPatterns = channelPatterns;
     }
 
     public MessageHandler getHandler() {
@@ -51,11 +49,10 @@ public class SubThread extends Thread {
     }
 
 
-    public SubThread(String url,
-                     MessageHandler handler,
-                     String... channels
-                     ){
-        this.channels = channels;
+    public PSubThread(String url,
+                      MessageHandler handler,
+                      String... channelPatterns){
+        this.channelPatterns = channelPatterns;
         this.url = url ;
         this.handler = handler ;
         this.pool =  new JedisPooled(url);
@@ -63,10 +60,10 @@ public class SubThread extends Thread {
 
     @Override
     public void run() {
-        log.info("subscribe redis, channel :{}, thread will be blocked", channels);
+        log.info("subscribe redis, channel :{}, thread will be blocked", channelPatterns);
         try {
             this.handler.setLastActive(System.currentTimeMillis());
-            pool.subscribe(this.handler, channels);
+            pool.psubscribe(this.handler, channelPatterns);
 
         } catch (Exception e) {
             log.info("subscribe channel error :{}->: {}",url, e.getMessage());

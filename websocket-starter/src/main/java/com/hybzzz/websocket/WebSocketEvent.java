@@ -1,4 +1,4 @@
-package com.nti56.csplice.ws;
+package com.hybzzz.websocket;
 
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.http.server.ServerHttpRequest;
@@ -28,5 +28,5 @@ public interface WebSocketEvent {
     void handleTransportError(WebSocketSession session, Throwable exception);
     void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus);
     void afterConnectionEstablished(WebSocketSession session);
-    JSONObject getUserInfo(String token);
+    String getConnKey(WebSocketSession session);
 }

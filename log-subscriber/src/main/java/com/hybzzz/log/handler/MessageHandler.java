@@ -21,13 +21,11 @@ public class MessageHandler extends JedisPubSub {
 
     @Override
     public void onSubscribe(String channel, int subscribedChannels) {
-        log.info("Subscribe");
         super.onSubscribe(channel, subscribedChannels);
     }
 
     @Override
     public void onUnsubscribe(String channel, int subscribedChannels) {
-        log.info("onUnsubscribe");
         super.onUnsubscribe(channel, subscribedChannels);
     }
 

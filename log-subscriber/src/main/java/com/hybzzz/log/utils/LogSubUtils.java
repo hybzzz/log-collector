@@ -1,8 +1,9 @@
 package com.hybzzz.log.utils;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.hybzzz.log.handler.MessageHandler;
+import com.hybzzz.log.thread.PSubThread;
 import com.hybzzz.log.thread.SubThread;
-import com.nti56.csplice.log.MessageHandler;
 
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -23,21 +24,31 @@ public class LogSubUtils {
             0, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS, new SynchronousQueue<>(),
             new ThreadFactoryBuilder().setNameFormat("log-worker-%d").setDaemon(true).build());
 
-    public static void subscribe  (String url,String channel,
-                                   BiConsumer<String,String> callback
-    )  {// 回调
+    /**
+     * 订阅
+     * @param url redis url
+     * @param channel 频道
+     * @param callback 消费后回调
+     * @return
+     */
+    public static MessageHandler subscribe  (String url,
+                                        BiConsumer<String,String> callback,
+                                             String... channels)  {// 回调
         MessageHandler handler = new MessageHandler();
         handler.setCallBack(callback);
-        new SubThread(url,channel,handler).start();
-    }
-    public static void subscribeAsync  (String url,String channel,
-                                        BiConsumer<String,String> callback
-    )  {// 回调
-        MessageHandler handler = new MessageHandler();
-        handler.setCallBack(callback);
-        LOG_ASYNC_EXECUTOR.submit(new SubThread(url,channel,handler));
+        LOG_ASYNC_EXECUTOR.submit(new SubThread(url,handler,channels));
+        return handler;
     }
 
+
+    public static MessageHandler psubscribe  (String url,
+                                             BiConsumer<String,String> callback,
+                                             String... channels)  {// 回调
+        MessageHandler handler = new MessageHandler();
+        handler.setCallBack(callback);
+        LOG_ASYNC_EXECUTOR.submit(new PSubThread(url,handler,channels));
+        return handler;
+    }
     public static int getCount(){
         return LOG_ASYNC_EXECUTOR.getActiveCount();
     }
