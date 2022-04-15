@@ -30,5 +30,18 @@ Marker test_marker = LogCollectorMarkerFactory.getMarker("本次输出的日志�
 log.info(test_marker,"ppppppasa:{}",123123);
 ```
 ##### 3、 日志输出
-使用CspliceLogMaker 标记的日志 将会被收集，并推送到redis的channel中，channel名称为：csplice_log_{appName}_{marker}
+使用LogCollectorMarker 标记的日志 将会被收集，并推送到redis的channel中，channel名称为：csplice_log_{appName}_{marker}
 同时 会在ja目录下 生成logs-{appName}文件夹 ，打印应用的日志
+
+#### 4、配置文件
+配置文件遵循ja-netfilter项目规范，在config-{appName}文件夹下，logplugin.conf
+
+```
+[REDIS]# redis 地址
+EQUAL,redis://localhost:6379
+[CHANNEL] # 推送频道
+PREFIX,log_collector
+[LOG] # 日志拦截规则
+PREFIX,test
+
+```
