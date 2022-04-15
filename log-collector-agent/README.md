@@ -15,16 +15,17 @@
 则可以参考如下代码
 ```
         <dependency>
-            <groupId>com.nti56.csplice</groupId>
-            <artifactId>nti-csplice-log-collector-common</artifactId>
+            <groupId>com.hybzzz</groupId>
+            <artifactId>log-collector-common</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 
+
 ```
 ```
 // 获取log marker， 用于标记是否被收集 ，以及日志批次 
-Marker test_marker = CspliceMarkerFactory.getMarker("本次输出的日志标记");
+Marker test_marker = LogCollectorMarkerFactory.getMarker("本次输出的日志标记");
 // 使用marker 做日志打印
 log.info(test_marker,"ppppppasa:{}",123123);
 ```
