@@ -24,7 +24,7 @@ public class MethodAdapterVisitor extends AdviceAdapter {
         // 加载参数
         loadArg(0);
         //(Lch/qos/logback/classic/spi/LoggingEvent;)Lch/qos/logback/classic/spi/LoggingEvent;
-        invokeStatic(Type.getType("Lcom/csplice/log/collector/agent/LogFilter;"),
+        invokeStatic(Type.getType("Lcom/hybzzz/log/collector/agent/LogFilter;"),
                 new Method("doFilter", "(Lch/qos/logback/classic/spi/LoggingEvent;)Lch/qos/logback/classic/spi/LoggingEvent;"));
     }
 

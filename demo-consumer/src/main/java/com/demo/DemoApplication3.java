@@ -23,7 +23,7 @@ public class DemoApplication3 {
     @GetMapping("sub/{channel}")
     @SneakyThrows
     public String test(@PathVariable String channel){
-        LogSubUtils.subscribe("redis://139.159.194.101:21181",
+        LogSubUtils.subscribe("redis://localhost:6379",
                 (c,m)->{
                     System.out.println(c);
                     System.out.println(m);
